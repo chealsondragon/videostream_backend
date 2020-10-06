@@ -26,6 +26,9 @@ export default {
   DASHBOARD: abstractURL('/dashboard'),
   PROFILE: abstractURL('/profile'),
   SEARCH: abstractURL('/search'),
+  PAY2WATCH: abstractURL('/pay2watch'),
+  MYLIST: abstractURL('/mylist'),
+  RECENT: abstractURL('/recent'),
 
   NOTFOUND: abstractURL('/notfound')
 };

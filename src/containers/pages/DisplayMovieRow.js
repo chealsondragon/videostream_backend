@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 // install Swiper components
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 
-export default function DisplayMovieRow(props) {
+function DisplayMovieRow(props) {
   const [values, setValues] = React.useState({
     width: window.innerWidth,
   });
@@ -18,13 +20,14 @@ export default function DisplayMovieRow(props) {
   };
 
   const { width } = values;
-  let netflixUrl = false;
-  if (
-    props.url ===
-    `/discover/tv?api_key=${process.env.API_KEY}&with_networks=213`
-  ) {
-    netflixUrl = true;
-  }
+
+  const allMovieDict = React.useMemo(() => {
+    let ret = {};
+    props.videos.list.map((video) => {
+      return ret[video.id] = video;
+    });
+    return ret;
+  }, [props.videos]);
 
   return (
     <>
@@ -64,24 +67,16 @@ export default function DisplayMovieRow(props) {
         slideToClickedSlide={false}
         pagination={{ clickable: true }}
       >
-        {props.movies.map((movie, idx) => {
-          let movieImageUrl =
-            'https://image.tmdb.org/t/p/w500/' + movie.backdrop_path;
-          if (
-            props.url ===
-            `/discover/tv?api_key=${process.env.API_KEY}&with_networks=213`
-          ) {
-            movieImageUrl =
-              'https://image.tmdb.org/t/p/original/' + movie.poster_path;
-          }
-          if (movie.poster_path && movie.backdrop_path !== null) {
+        {props.movies.map((movie_id, idx) => {
+          let movieData = allMovieDict && allMovieDict[movie_id];
+          let movieImageUrl = movieData && (props.title !== "Originals" ? movieData.title_logo : movieData.cover);
+          if (movieData && movieImageUrl) {
             return (
               <SwiperSlide
-                onClick={() => props.selectMovieHandler(movie)}
+                onClick={() => props.selectMovieHandler(movieData)}
                 key={idx}
                 className={
-                  'movieShowcase__container--movie' +
-                  (netflixUrl ? '__netflix' : '')
+                  'movieShowcase__container--movie'
                 }
               >
                 <img
@@ -96,3 +91,10 @@ export default function DisplayMovieRow(props) {
     </>
   );
 }
+
+export default injectIntl(
+  connect(
+    ({ videos }) => ({ videos }),
+    null
+  )(DisplayMovieRow)
+); 

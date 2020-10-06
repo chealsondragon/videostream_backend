@@ -14,7 +14,7 @@ export default function ModalMovieDetails(props) {
         </h1>
         <p className="modal__info">
           <span className="modal__rating">
-            Rating: {props.movie.vote_average * 10}%{" "}
+            Rating: {props.movie.rating * 10}%{" "}
           </span>
           Release date: {props.movie.release_date || props.movie.first_air_date}  Runtime: {props.movie.runtime || props.movie.episode_run_time}m
         </p>

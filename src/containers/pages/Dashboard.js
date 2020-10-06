@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 import MainContent from './MainContent';
 import Modal from '../../components/UI/Modal';
 import MovieDetails from '../../components/Movie/MovieDetails';
 
-function Home(props) {
+import * as api from '../../crud/videos.crud';
+import * as actions from '../../store/ducks/videos.duck';
+
+function Dashboard(props) {
   const [values, setValues] = React.useState({
     /** Toggles the modal when a movie is clicked. */
     toggleModal: false,
@@ -34,4 +39,11 @@ function Home(props) {
   );
 }
 
-export default Home;
+export default injectIntl(
+  connect(
+    ({ videos }) => ({ videos }),
+    {
+      ...actions
+    }
+  )(Dashboard)
+);

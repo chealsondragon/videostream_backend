@@ -10,13 +10,12 @@ const linkStyle = {
 }
 
 function dropdownContent(props) {
-  console.log(props.user)
   return (
     <div className="dropdownContainer">
       <div className="navigation__container--userLogo">
         <div className="dropdownContent">
           {props.user && props.user.profiles && props.user.profiles.map((profile) => (
-            <div>
+            <div key={profile.id}>
               <div className="dropdownContent--user"></div>
               <p className="dropdownContent--user-text">{`${profile.name} (${profile.type && profile.type.name})`}</p>
             </div>

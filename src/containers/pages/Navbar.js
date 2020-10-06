@@ -37,7 +37,16 @@ function Navbar(props) {
     setValues(values => ({ ...values, userInput: event.target.value }));
     const userInput = event.target.value
 
-    makeAipCall(userInput);
+    if (userInput.length === 0) {
+      props.history.push(URL.INDEX())
+      return
+    }
+
+    props.history.push({
+      pathname: URL.SEARCH(),
+      // movies: results,
+      userInput: userInput
+    });
   }
 
   /** Make API call as soon as the user starts typing.  */
@@ -67,17 +76,16 @@ function Navbar(props) {
   return (
     <nav className={"navigation " + (scrolling ? "black" : "")} >
       <ul className="navigation__container">
-        <NavLink to="/" onClick={() => onLogoClick()}>
+        <NavLink to={URL.INDEX()} onClick={() => onLogoClick()}>
           <NetflixLogo className="navigation__container--logo"></NetflixLogo>
-          {/* <img className="navigation__container--logo" src={NetflixLogo} alt="" /> */}
         </NavLink>
         <DropdownArrow className="navigation__container--downArrow-2"></DropdownArrow>
-        <div className="navigation__container-link pseudo-link">Home</div>
+        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.INDEX())}>Home</div>
         {/* <div className="navigation__container-link pseudo-link">Movies</div>
         <div className="navigation__container-link pseudo-link">Dramas</div> */}
-        <div className="navigation__container-link pseudo-link">Pay2Watch</div>
-        <div className="navigation__container-link pseudo-link">Recently Added</div>
-        <div className="navigation__container-link pseudo-link">My List</div>
+        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.PAY2WATCH())}>Pay2Watch</div>
+        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.RECENT())}>Recently Added</div>
+        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.MYLIST())}>My List</div>
 
         <div className="navigation__container--left">
           <SearchLogo className="logo" />

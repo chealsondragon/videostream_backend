@@ -14,7 +14,10 @@ import * as serie_type from "./ducks/serie_type.duck";
 import * as users from "./ducks/users.duck";
 import * as categories from "./ducks/categories.duck";
 import * as videos from "./ducks/videos.duck";
+import * as my_list from "./ducks/my_list.duck";
 import * as video_files from "./ducks/video-files.duck";
+
+import * as video_player from "./ducks/video_player.duck";
 
 export const rootReducer = combineReducers({
   auth: auth.reducer,
@@ -29,6 +32,9 @@ export const rootReducer = combineReducers({
   categories: categories.reducer,
   videos: videos.reducer,
   video_files: video_files.reducer,
+
+  my_list: my_list.reducer,
+  video_player: video_player.reducer,
 
   i18n: i18n.reducer,
 });

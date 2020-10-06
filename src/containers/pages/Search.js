@@ -1,20 +1,45 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
+
+import URL from '../../helpers/url';
 
 import Modal from '../../components/UI/Modal';
 import MovieDetails from '../../components/Movie/MovieDetails';
 import Movie from '../../components/Movie/Movie';
-import axios from "../../axios-movies"
 
-export default function Search(props) {
+import * as api_fetch from '../../crud/moviedb.crud';
+
+function Search(props) {
   const [values, setValues] = React.useState({
     movies: [],
     toggleModal: false,
     /** Holds the movie information for a single movie. */
     movieOverview: {},
   });
+  
+  const { location: { pathname, userInput } } = props;
 
   React.useEffect(() => {
-  }, []);
+    if(pathname === URL.SEARCH()){
+      api_fetch.fetchbyName(userInput)
+        .then((res) => {
+          setValues(values => ({ 
+            ...values, 
+            movies: res.data || {}
+          }));
+        })
+    }else if(pathname === URL.MYLIST()){
+    }else{
+      api_fetch.fetchByTag(pathname.replace("/", ""))
+        .then((res) => {
+          setValues(values => ({ 
+            ...values, 
+            movies: res.data || {}
+          }));
+        })
+    }
+  }, [pathname, userInput]);
 
   const closeModal = () => {
     setValues(values => ({ ...values, toggleModal: false }));
@@ -22,31 +47,21 @@ export default function Search(props) {
 
   /* Get the appropriate details for a specific movie that was clicked */
   const selectMovieHandler = (movie) => {
-    setValues(values => ({ ...values, toggleModal: true }));
-
-    let url;
-    /** Make the appropriate API call to get the details for a single movie or tv show. */
-    if (movie.media_type === "movie") {
-      const movieId = movie.id;
-      url = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.API_KEY}`;
-
-    } else if (movie.media_type === "tv") {
-      const tvId = movie.id
-      url = `https://api.themoviedb.org/3/tv/${tvId}?api_key=${process.env.API_KEY}`;
-    }
-
-    axios.get(url)
-      .then(res => {
-        const movieData = res.data;
-        setValues(values => ({ ...values, movieOverview: movieData }));
-      }).catch(error => {
-        console.log(error);
-      });
+    setValues(values => ({ ...values, toggleModal: true, movieOverview: movie }));
   }
 
-  const { location: { movies } } = props;
-  const { toggleModal, movieOverview } = values
-  const { userInput } = props.location
+  const allMovieDict = React.useMemo(() => {
+    let ret = {};
+    props.videos.list.map((video) => {
+      return ret[video.id] = video;
+    });
+    return ret;
+  }, [props.videos]);
+
+  var { toggleModal, movieOverview, movies } = values
+  
+  if(pathname === URL.MYLIST())
+    movies = props.my_list.list;
 
   return (
     <>
@@ -54,18 +69,17 @@ export default function Search(props) {
         movies && movies.length > 0 ? (
           <div className="search-container">
             {
-              movies.map((movie) => {
+              movies.map((movie_id) => {
                 let movieRows = []
-                let movieImageUrl;
-                if (movie.poster_path !== null && movie.media_type !== "person") {
-                  movieImageUrl = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
-
+                let movieData = allMovieDict && allMovieDict[movie_id];
+                let movieImageUrl = movieData && movieData.title_logo
+                if (movieData && movieImageUrl) {
                   /** Set the movie object to our Movie component */
                   const movieComponent = <Movie
-                    movieDetails={() => selectMovieHandler(movie)}
-                    key={movie.id}
+                    movieDetails={() => selectMovieHandler(movieData)}
+                    key={movie_id}
                     movieImage={movieImageUrl}
-                    movie={movie} />
+                    movie={movieData} />
 
                   /** Push our movie component to our movieRows array */
                   movieRows.push(movieComponent);
@@ -77,14 +91,7 @@ export default function Search(props) {
         ) : (
             <div className="no-results">
               <div className="no-results__text">
-                <p>Your search for "{userInput}" did not have any matches.</p>
-                <p>Suggestions:</p>
-                <ul>
-                  <li>Try different keywords</li>
-                  <li>Looking for a movie or TV show?</li>
-                  <li>Try using a movie, TV show title, an actor or director</li>
-                  <li>Try a genre, like comedy, romance, sports, or drama</li>
-                </ul>
+                <p>No videos.</p>
               </div>
             </div>
           )
@@ -97,3 +104,10 @@ export default function Search(props) {
     </>
   );
 }
+
+export default injectIntl(
+  connect(
+    ({ videos, my_list }) => ({ videos, my_list }),
+    null
+  )(Search)
+);

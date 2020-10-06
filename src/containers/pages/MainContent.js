@@ -1,94 +1,56 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import {
-  fetchNetflixOriginals,
-  fetchTrending,
-  fetchTopRated,
-  fetchActionMovies,
-  fetchComedyMovies,
-  fetchDocumentaries,
-  fetchHorrorMovies
-} from '../../crud/moviedb.crud';
 import DisplayMovieRow from './DisplayMovieRow';
+
+import * as api_video from '../../crud/videos.crud';
+import { actions } from '../../store/ducks/videos.duck';
+
+import * as api_mylist from '../../crud/my_list.crud';
+import { actions as actions_mylist } from '../../store/ducks/my_list.duck';
+
+import * as api_fetch from '../../crud/moviedb.crud';
 
 function MainContent(props) {
 
   const [values, setValues] = React.useState({
     /** Will hold our chosen movie to display on the header */
     selectedMovie: {},
-    movieInfo: {
-      originals: {
-        title: 'Originals',
-        url: `/discover/tv?api_key=${process.env.API_KEY}&with_networks=213`,
-        movies: [],
-      },
-      trending: {
-        title: 'Trending Now',
-        url: `/trending/all/week?api_key=${process.env.API_KEY}&language=en-US`,
-        movies: [],
-      },
-      top: {
-        title: 'Top Rated',
-        url: `/movie/top_rated?api_key=${process.env.API_KEY}&language=en-US`,
-        movies: [],
-      },
-      action : {
-        title: 'Action Movies',
-        url: `/discover/movie?api_key=${process.env.API_KEY}&with_genres=28`,
-        movies: [],
-      },
-      comedy: {
-        title: 'Comedy Movies',
-        url: `/discover/tv?api_key=${process.env.API_KEY}&with_genres=35`,
-        movies: [],
-      },
-      horror: {
-        title: 'Horror Movies',
-        url: `/discover/tv?api_key=${process.env.API_KEY}&with_genres=27`,
-        movies: [],
-      },
-      documentries: {
-        title: 'Documentaries',
-        url: `/discover/tv?api_key=${process.env.API_KEY}&with_genres=99`,
-        movies: [],
-      },
+    summary : {
     },
+    category : {
+    }
   })
 
   React.useEffect(() => {
-    getMovie();
-    fetchNetflixOriginals()
+    api_video.loadAll()
       .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, originals: { ...values.movieInfo.originals, movies: res.data.results } } }));
+        props.loadAll(res.data || [])
+        const firstMovie = res.data && res.data.data && res.data.data[0];
+        setValues(values => ({ ...values, selectedMovie: firstMovie }));
       })
-    fetchTrending()
+    api_mylist.loadAll()
       .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, trending: { ...values.movieInfo.trending, movies: res.data.results } } }));
+        props.loadAllMylist(res.data || [])
       })
-    fetchTopRated()
+    // getMovie();
+    api_fetch.fetchBySummary()
       .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, top: { ...values.movieInfo.top, movies: res.data.results } } }));
+        setValues(values => ({ 
+          ...values, 
+          summary: res.data || {}
+        }));
       })
-    fetchActionMovies()
+    api_fetch.fetchByCategories()
       .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, action: { ...values.movieInfo.action, movies: res.data.results } } }));
-      })
-    fetchComedyMovies()
-      .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, comedy: { ...values.movieInfo.comedy, movies: res.data.results } } }));
-      })
-    fetchDocumentaries()
-      .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, documentries: { ...values.movieInfo.documentries, movies: res.data.results } } }));
-      })
-    fetchHorrorMovies()
-      .then((res) => {
-        setValues(values => ({ ...values, movieInfo: { ...values.movieInfo, horror: { ...values.movieInfo.horror, movies: res.data.results } } }));
+        setValues(values => ({ 
+          ...values, 
+          category: res.data || {}
+        }));
       })
   }, [])
 
@@ -119,16 +81,29 @@ function MainContent(props) {
       <Header movie={values.selectedMovie} />
       <div className="movieShowcase">
         {
-          Object.keys(values.movieInfo).map((key) => {
-            const info = values.movieInfo[key];
-            if (info.movies.length > 0) {
+          Object.keys(values.summary).map((title) => {
+            const ids = values.summary[title];
+            if (ids.length > 0) {
               return (
                 <DisplayMovieRow
                   selectMovieHandler={onSelectMovie}
-                  key={info.title}
-                  title={info.title}
-                  url={info.url}
-                  movies={info.movies}
+                  key={title}
+                  title={title}
+                  movies={ids}
+                />)
+            }
+          })
+        }
+        {
+          Object.keys(values.category).map((title) => {
+            const ids = values.category[title];
+            if (ids.length > 0) {
+              return (
+                <DisplayMovieRow
+                  selectMovieHandler={onSelectMovie}
+                  key={title}
+                  title={title}
+                  movies={ids}
                 />)
             }
           })
@@ -139,31 +114,12 @@ function MainContent(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    // netflixOriginals: state.netflixOriginals,
-    // trending: state.trending,
-    // topRated: state.topRated,
-    // actionMovies: state.action,
-    // comedyMovies: state.comedy,
-    // documentaries: state.documentary,
-    // horrorMovies: state.horror
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({
-    // fetchNetflixOriginals,
-    // fetchTrending,
-    // fetchTopRated,
-    // fetchActionMovies,
-    // fetchComedyMovies,
-    // fetchDocumentaries,
-    // fetchHorrorMovies
-  }, dispatch);
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MainContent); 
+export default injectIntl(
+  connect(
+    ({ videos, my_list }) => ({ videos, my_list }),
+    {
+      ...actions,
+      loadAllMylist: actions_mylist.loadAll
+    }
+  )(MainContent)
+); 

@@ -18,9 +18,34 @@
          padding-left: 1rem;
       }
 
+      &-action {
+         display: flex;
+         align-items: center;
+      }
+      
+      &-vote__up,
+      &-vote__down {
+         max-height: 60px;
+         padding: 10px;
+         border: 2px solid white;
+         border-radius: 60px;
+         background-color: transparent;
+         cursor: pointer;
+         margin: 10px;
+      }
+
+      &-vote__check{
+         background-color: lightgreen;
+      }
+
       &-heading {
          font-size: 6rem;
          padding-bottom: 1rem;
+      }
+
+      &-serie_type {
+         font-size: 1.5rem;
+         color: lightgray;
       }
 
       &-btnPlay, 
@@ -38,6 +63,7 @@
          padding-top: 1rem;
          background-color: rgba(51,51,51,.5); 
          padding-bottom: 1rem;
+         max-height: 40px;
 
          &-add {
             width: 15px;

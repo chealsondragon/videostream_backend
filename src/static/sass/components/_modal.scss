@@ -18,7 +18,6 @@
       height: 50rem;
    }
 
-
    &__container {
       background: linear-gradient(90deg, #000 50%, transparent);
       width: 70%;
@@ -40,15 +39,46 @@
          padding-top: 1rem;
          padding-left: 1rem;
       }
+   
+   }
+
+   &__action {
+      display: flex;
+      align-items: center;
+   }
+   
+   &__vote__up,
+   &__vote__down {
+      max-height: 60px;
+      padding: 10px;
+      border: 2px solid white;
+      border-radius: 60px;
+      background-color: transparent;
+      cursor: pointer;
+      margin: 10px;
+   }
+
+   &__vote__check{
+      background-color: lightgreen;
    }
 
    &__title {
       font-size: 4rem;
    }
 
+   &__serie_type {
+      font-size: 1.4rem;
+      color: $color-modal-grey-2;
+   }
+
    &__rating {
       font-size: 2rem;
       color: $color-green-modal;
+   }
+
+   &__price {
+      font-size: 1.8rem;
+      color: '#00ffff';
    }
 
    &__info {

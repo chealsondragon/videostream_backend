@@ -8,6 +8,7 @@ import Search from "./Search";
 import Navbar from "./Navbar";
 
 import LayoutSplashScreen from "../../components/LayoutSplashScreen";
+import VideoPlayer from "../../components/VideoPlayer";
 
 export default function HomePage() {
   return (
@@ -21,8 +22,13 @@ export default function HomePage() {
         <Route path={URL.DASHBOARD()} component={Dashboard} />
         <Route path={URL.SEARCH()} component={Search} />
 
+        <Route path={URL.PAY2WATCH()} component={Search} />
+        <Route path={URL.RECENT()} component={Search} />
+        <Route path={URL.MYLIST()} component={Search} />
+
         <Redirect to={URL.NOTFOUND()} />
       </Switch>
+      <VideoPlayer/>
     </Suspense>
   );
 }
