@@ -12,6 +12,8 @@ import * as profile_type from "./ducks/profile_type.duck";
 import * as serie_type from "./ducks/serie_type.duck";
 
 import * as users from "./ducks/users.duck";
+import * as user_profiles from "./ducks/user_profiles.duck";
+
 import * as categories from "./ducks/categories.duck";
 import * as videos from "./ducks/videos.duck";
 import * as my_list from "./ducks/my_list.duck";
@@ -23,12 +25,14 @@ export const rootReducer = combineReducers({
   auth: auth.reducer,
   report: report.reducer,
 
+  users: users.reducer,
+  user_profiles: user_profiles.reducer,
+
   language: language.reducer,
   plan: plan.reducer,
   profile_type: profile_type.reducer,
   serie_type: serie_type.reducer,
 
-  users: users.reducer,
   categories: categories.reducer,
   videos: videos.reducer,
   video_files: video_files.reducer,
@@ -42,9 +46,10 @@ export const rootReducer = combineReducers({
 export function* rootSaga() {
   yield all([
     auth.saga(), 
-    // channel.saga(), 
-    // link.saga(), 
-    // offer.saga(),
     users.saga(),
+    user_profiles.saga(),
+    profile_type.saga(),
+    categories.saga(),
+    language.saga(),
   ]);
 }

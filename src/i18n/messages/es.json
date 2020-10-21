@@ -8,6 +8,12 @@
   "MENU.APPS": "Aplicaciones",
   "MENU.DASHBOARD": "Tablero",
 
+  "MENU.HOME": "Casa",
+  "MENU.PAY2WATCH": "Paga2ver",
+  "MENU.RECENT": "Recientemente añadido",
+  "MENU.MYLIST": "Mi Lista",
+  "MENU.KIDS": "Niñas",
+
   "MENU.REPORT": "Reporte",
   "MENU.PROFILE": "Perfil",
   "MENU.CHANNELS": "Canales",
@@ -71,5 +77,14 @@
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.TITLE": "Status has been updated for selected customers",
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE": "Selected customers status have successfully been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
-  "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created"
+  "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
+
+  
+  "MOVIE.PLAY": "Reproducir",
+  "MOVIE.ADD_TO_MYLIST": "Mi lista",
+  "MOVIE.REMOVE_FROM_MYLIST": "Eliminar de la lista",
+  "MOVIE.RATING": "Calificación",
+  "MOVIE.RELEASE_DATE": "Fecha de lanzamiento",
+  "MOVIE.PRICE": "Precio",
+  "MOVIE.MEMBERSHIP": "Membresía mínima"
 }

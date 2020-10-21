@@ -38,6 +38,22 @@
          background-color: lightgreen;
       }
 
+      &-categories {
+         display: flex;
+         align-items: flex-start;
+
+         span {
+            font-size: 18px;
+            color: white;
+            margin: .2em;
+            padding: .3em;
+            border-radius: .3em;
+            border: 1px solid white;
+            background-color: rgba(0, 0, 0, 0.2);
+            opacity: .8;
+         }
+      }
+
       &-heading {
          font-size: 6rem;
          padding-bottom: 1rem;

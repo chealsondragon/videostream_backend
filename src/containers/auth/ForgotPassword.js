@@ -65,7 +65,7 @@ class ForgotPassword extends Component {
         }) => (
             <form onSubmit={handleSubmit} className="kt-form-auth">
               <p className="auth-form-header">
-                <FormattedMessage id="AUTH.FORGOT.TITLE" />
+                <FormattedMessage id="AUTH.FORGOT.TITLE" defaultMessage="Forgot Password"/>
               </p>
 
               {status && (
@@ -78,7 +78,6 @@ class ForgotPassword extends Component {
                 <TextField
                   type="email"
                   label="Email"
-                  margin="normal"
                   fullWidth={true}
                   name="email"
                   onBlur={handleBlur}

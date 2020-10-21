@@ -1,6 +1,7 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
+import * as api from "../../crud/categories.crud";
 
 export const actionTypes = {
   SetLoading: "[SetLoading-Category] Action",
@@ -11,6 +12,8 @@ export const actionTypes = {
   Load: "[Load-Category] Action",
   LoadAll: "[LoadAll-Category] Action",
   LoadRequest: "[LoadRequest-Category] Action",
+
+  LoadAllRequest: "[LoadAllRequest-Category] Action",
 };
 
 const initialAuthState = {
@@ -102,10 +105,19 @@ export const actions = {
   loadRequest: () => ({ type: actionTypes.LoadRequest, payload: null }),
 
   setLoading: loading => ({ type: actionTypes.SetLoading, payload: { loading } }),
-  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } })
+  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } }),
+
+  loadAllRequest: () => ({ type: actionTypes.LoadAllRequest, payload: null }),
 };
 
 export function* saga() {
-  yield takeLatest(actionTypes.LoadRequest, function* loginSaga() {
+  yield takeLatest(actionTypes.LoadAllRequest, function* requestAllCategories() {
+    yield put(actions.setLoading(true));
+    const response = yield api.loadAll();
+    if(response && response.status === 200){
+      const { data } = response;
+      yield put(actions.loadAll(data));
+    }
+    yield put(actions.setLoading(false));
   });
 }

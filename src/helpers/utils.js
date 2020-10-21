@@ -1,3 +1,5 @@
+import axiosCancel from 'axios-cancel';
+
 export function removeCSSClass(ele, cls) {
   const reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
   ele.className = ele.className.replace(reg, " ");
@@ -10,14 +12,19 @@ export function addCSSClass(ele, cls) {
 export const toAbsoluteUrl = pathname => process.env.PUBLIC_URL + pathname;
 
 export function setupAxios(axios, store) {
+  axiosCancel(axios, {
+    debug: false // default
+  });
+  
   axios.interceptors.request.use(
     config => {
       const {
-        auth: { authToken }
+        auth: { authToken, profile }
       } = store.getState();
 
       if (authToken) {
         config.headers.Authorization = `Bearer ${authToken}`;
+        config.headers['profile_id'] = profile && profile.id;
       }
 
       config.baseURL = process.env.API_BASE_URL || "/"

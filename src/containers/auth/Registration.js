@@ -155,7 +155,7 @@ function Registration(props) {
       }) => (
           <form onSubmit={handleSubmit} noValidate autoComplete="off" className="kt-form-auth">
             <p className="auth-form-header">
-              <FormattedMessage id="AUTH.REGISTER.TITLE" />
+              <FormattedMessage id="AUTH.REGISTER.TITLE" defaultMessage="Register"/>
             </p>
 
             {status && (

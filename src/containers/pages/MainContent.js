@@ -37,7 +37,6 @@ function MainContent(props) {
       .then((res) => {
         props.loadAllMylist(res.data || [])
       })
-    // getMovie();
     api_fetch.fetchBySummary()
       .then((res) => {
         setValues(values => ({ 
@@ -52,6 +51,15 @@ function MainContent(props) {
           category: res.data || {}
         }));
       })
+
+    return () => {
+      setValues(values => ({ 
+        ...values, 
+        category: {},
+        summary: {},
+        selectedMovie: {},
+      }));
+    }
   }, [])
 
   const getMovie = () => {
@@ -71,7 +79,7 @@ function MainContent(props) {
   };
 
   const onSelectMovie = (movieData) => {
-    setValues(values => ({ ...values, selectedMovie: movieData }));
+    // setValues(values => ({ ...values, selectedMovie: movieData }));
     if(props.selectMovieHandler)
       props.selectMovieHandler(movieData);
   }

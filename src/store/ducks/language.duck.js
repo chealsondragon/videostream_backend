@@ -1,6 +1,7 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
+import * as api from "../../crud/language.crud";
 
 export const actionTypes = {
 SetLoading: "[SetLoading-Language] Action",
@@ -11,6 +12,8 @@ SetLoading: "[SetLoading-Language] Action",
   Load: "[Load-Language] Action",
   LoadAll: "[LoadAll-Language] Action",
   LoadRequest: "[LoadRequest-Language] Action",
+
+  LoadAllRequest: "[LoadAllRequest-Language] Action",
 };
 
 const initialAuthState = {
@@ -102,22 +105,19 @@ export const actions = {
   loadRequest: () => ({ type: actionTypes.LoadRequest, payload: null }),
 
   setLoading: loading => ({ type: actionTypes.SetLoading, payload: { loading } }),
-  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } })
+  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } }),
+  
+  loadAllRequest: () => ({ type: actionTypes.LoadAllRequest, payload: null }),
 };
 
 export function* saga() {
-  yield takeLatest(actionTypes.LoadRequest, function* loginSaga() {
-    // yield put(auth_actions.requestUser());
-
-  //   yield put(actions.setLoading(true));
-  //   api.loadAll()
-  //     .then((result) => {
-  //       setValues({...values, success: "Loading links success!"})
-  //       yield put(actions.loadAll(result.data || []));
-  //     })
-  //     .catch((error) => {
-  //       setValues({...values, error: "Error in loading links!"})
-  //       yield put(actions.setLoading(false));
-  //     })
+  yield takeLatest(actionTypes.LoadAllRequest, function* requestAllLanguage() {
+    yield put(actions.setLoading(true));
+    const response = yield api.loadAll();
+    if(response && response.status === 200){
+      const { data } = response;
+      yield put(actions.loadAll(data));
+    }
+    yield put(actions.setLoading(false));
   });
 }

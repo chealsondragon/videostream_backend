@@ -34,7 +34,6 @@ const AppRouter = () => {
             /* Render auth page when user at `/auth` and not authorized. */
             <>
               <Route path={URL.INDEX()} component={Landing} />
-              <Route path={URL.AUTH()} component={AuthPage} />
             </>
           ) : (
               /* Otherwise redirect to root page (`/`) */
@@ -44,6 +43,7 @@ const AppRouter = () => {
           <Route path={URL.LOGOUT()} component={LogoutPage} />
 
           {isAuthorized && <HomePage userLastLocation={userLastLocation} /> }
+
         </Switch>
       </BrowserRouter>
     </I18nProvider>

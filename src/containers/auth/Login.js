@@ -41,15 +41,9 @@ const Button = styled.button`
 
 const styles = {
   loginTitle: {
-    width: 400,
-    height: 'auto',
-    padding: 50,
-    marginLeft: '40%',
-    textAlign: 'center',
-    backgroundColor: 'black',
+    color: 'white',
     opacity: 0.5,
-    fontSize: 20,
-    borderRadius: 3
+    fontSize: 14,
   },
   inputBox: {
     backgroundColor: 'white',
@@ -60,7 +54,7 @@ const styles = {
   },
   welcomeTitle: {
     color: 'white',
-    marginBott: 20,
+    marginBottom: 20,
   },
 };
 
@@ -154,24 +148,18 @@ function Login(props) {
               onSubmit={handleSubmit}
             >
               <h3 style={styles.welcomeTitle}>Welcome to videostream</h3>
-              {status && (
-                <div role="alert" className="alert alert-danger">
-                  <div className="alert-text" style={styles.loginTitle}>{status}</div>
-                </div>
-              )}
+              {status && <h5 style={styles.loginTitle}>{status}</h5>}
 
               <div className="form-group auth-form-field">
                 <Input
                   type="email"
                   label="Email"
-                  margin="normal"
                   name="email"
                   size="medium"
                   placeholder="Email"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.email}
-                  helperText={touched.email && errors.email}
                   error={Boolean(touched.email && errors.email)}
                   style={styles.inputBox}
                 />
@@ -180,7 +168,6 @@ function Login(props) {
               <div className="form-group auth-form-field">
                 <Input
                   type="password"
-                  margin="normal"
                   label="Password"
                   className="kt-width-full"
                   name="password"
@@ -188,7 +175,6 @@ function Login(props) {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.password}
-                  helperText={touched.password && errors.password}
                   error={Boolean(touched.password && errors.password)}
                   style={styles.inputBox}
                 />
@@ -199,11 +185,11 @@ function Login(props) {
                   Login
                 </Button>
                 <Link to={URL.FORGOT_PASSWORD()}>
-                  <Button right hidden disabled={isSubmitting}>
-                    <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" />
+                  <Button hidden disabled={isSubmitting}>
+                    <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" defaultMessage="Forgot Password"/>
                   </Button>
                 </Link>
-                <Link to={URL.REGISTER()} right>
+                <Link to={URL.REGISTER()}>
                   <Button  color="#333333">
                     Go to Register
                   </Button>

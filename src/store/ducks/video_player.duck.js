@@ -1,6 +1,6 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 
 export const actionTypes = {
   StartPlaying: "[StartPlaying-VideoPlayer] Action",
@@ -27,7 +27,6 @@ export const reducer = persistReducer(
       case actionTypes.StopPlaying: {
         return {
           meta: null,
-          url: null,
           isPlaying: false
         }
       }
@@ -44,6 +43,4 @@ export const actions = {
 };
 
 export function* saga() {
-  yield takeLatest(actionTypes.LoadRequest, function* loginSaga() {
-  });
 }

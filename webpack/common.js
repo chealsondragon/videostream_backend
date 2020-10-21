@@ -47,13 +47,16 @@ module.exports = (mode) => () => {
         {
           test: /\.scss$/,
           use: [
+            'css-hot-loader',
             {
               loader: MiniCssExtractPlugin.loader,
               options: {
                 publicPath: '../',
               },
             },
-            'css-loader',
+            {
+              loader: 'css-loader',
+            },
             'sass-loader',
           ],
         },
@@ -73,7 +76,10 @@ module.exports = (mode) => () => {
       ],
     },
     resolve: {
-      extensions: ['*', '.js', '.jsx', '.json', '.css']
+      extensions: ['*', '.js', '.jsx', '.json', '.css'],
+      alias: {
+        src: path.resolve(__dirname, '../src/'),
+      },
     },
     devServer: {
       historyApiFallback: true,

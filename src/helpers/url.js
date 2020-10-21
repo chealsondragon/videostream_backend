@@ -15,6 +15,13 @@ const abstractURL = (pathRegex) => (options) =>
 export default {
   INDEX: abstractURL('/'),
 
+  // PROFILE
+  PROFILE: abstractURL('/profile'),
+  SELECT_PROFILE: abstractURL('/profile/select'),
+  MANAGE_PROFILE: abstractURL('/profile/manage'),
+  EDIT_PROFILE: abstractURL('/profile/edit/:id'),
+  ADD_PROFILE: abstractURL('/profile/add'),
+
   // Authentication
   AUTH: abstractURL('/auth'),
   LOGIN: abstractURL('/auth/login'),

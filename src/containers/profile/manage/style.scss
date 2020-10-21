@@ -1,0 +1,126 @@
+.manage-container {
+  margin-left: 15%;
+  width: 70%;
+  height: 100%;
+  padding: 20em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+  .title {
+    color: #fff;
+    text-align: center;
+    font-size: 70px;
+    font-weight: 300;
+    white-space: nowrap;
+    justify-items: center;
+  }
+  
+  .profile-group {
+    width: 100%;
+    padding: 3em;
+    display: flex; 
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .profile-block {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    color: gray;
+    text-align: center;
+    font-size: 25px;
+    padding: .5em;
+    cursor: pointer;
+  
+    .back-overlay {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background-color: black;
+      opacity: .5;
+    }
+  
+    .edit-overlay {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      opacity: .5;
+      margin: 50px;
+  
+      img {
+        width: 100%;
+        height: 100%;
+        padding: 8px;
+        border-radius: 25px;
+        border: 2px solid white !important;
+      }
+    }
+    
+    span {
+      margin-top: .5em;
+    }
+    
+    img {
+      border-radius: 5px;
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+    }
+  
+    &:hover, &.active{
+      color: white;
+      
+      img {
+        border: 2px solid white;
+      }
+    }
+  }
+  
+  .add-profile {
+    border-radius: 5px;
+    background: transparent;
+    text-decoration: none;
+  
+    .circle {
+      border-radius: 100px;
+      background: gray;
+      margin: 25px;
+      width: 100px;
+      height: 100px;
+      font-size: 120px;
+      color: black;
+      text-decoration: none;
+    }
+  
+    &:hover{
+      background: white;
+      .circle {
+        color: white;
+      }
+    }
+  }
+  
+  .div-done-wrapper {
+    padding-top: 1em;
+    text-align: center;
+  
+    button {
+      border: 0px;
+      color: black;
+      text-align: center;
+      font-size: 25px;
+      padding: .3em;
+      background: white;
+      cursor: pointer;
+      min-width: 150px;
+    
+      &:hover {
+        border: 0px;
+        color: white;
+        background-color: red;
+      }
+    }
+  }
+}

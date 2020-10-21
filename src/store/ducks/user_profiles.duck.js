@@ -1,19 +1,18 @@
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { put, takeLatest } from "redux-saga/effects";
-import * as api from "../../crud/profile_type.crud";
+import * as api from "../../crud/user_profiles.crud";
 
 export const actionTypes = {
-  SetLoading: "[SetLoading-ProfileType] Action",
-  SetActionProgress: "[SetActionProgress-ProfileType] Action",
-  Create: "[Create-ProfileType] Action",
-  Update: "[Updated-ProfileType] Action",
-  Delete: "[Delete-ProfileType] Action",
-  Load: "[Load-ProfileType] Action",
-  LoadAll: "[LoadAll-ProfileType] Action",
-  LoadRequest: "[LoadRequest-ProfileType] Action",
+  SetLoading: "[SetLoading-UserProfile] Action",
+  SetActionProgress: "[SetActionProgress-UserProfile] Action",
+  Create: "[Create-UserProfile] Action",
+  Update: "[Updated-UserProfile] Action",
+  Delete: "[Delete-UserProfile] Action",
+  Load: "[Load-UserProfile] Action",
+  LoadAll: "[LoadAll-UserProfile] Action",
 
-  LoadAllRequest: "[LoadAllRequest-ProfileType] Action",
+  LoadAllRequest: "[LoadAllRequest-UserProfile] Action",
 };
 
 const initialAuthState = {
@@ -23,7 +22,7 @@ const initialAuthState = {
 };
 
 export const reducer = persistReducer(
-  { storage, key: "profile_type" },
+  { storage, key: "user_profiles" },
   (state = initialAuthState, action) => {
     switch (action.type) {
       case actionTypes.SetLoading: {
@@ -71,8 +70,7 @@ export const reducer = persistReducer(
       case actionTypes.Delete: {
         const { id } = action.payload;
         const list = state.list || [];
-        const newList = list.filter((x) => x.id !== id);
-        console.log(newList)
+        const newList = list.filter((x) => x.id !== parseInt(id));
 
         return { 
           isLoading: false,
@@ -102,18 +100,19 @@ export const actions = {
   update: data => ({ type: actionTypes.Update, payload: data }),
   delete: id => ({ type: actionTypes.Delete, payload: { id } }),
   loadAll: data => ({ type: actionTypes.LoadAll, payload: data }),
-  loadRequest: () => ({ type: actionTypes.LoadRequest, payload: null }),
+
+  loadAllRequest: user_id => ({ type: actionTypes.LoadAllRequest, payload: { user_id } }),
 
   setLoading: loading => ({ type: actionTypes.SetLoading, payload: { loading } }),
-  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } }),
-
-  loadAllRequest: () => ({ type: actionTypes.LoadAllRequest, payload: null }),
+  setActionProgress: progress => ({ type: actionTypes.SetActionProgress, payload: { progress } })
 };
 
 export function* saga() {
-  yield takeLatest(actionTypes.LoadAllRequest, function* requestAllPTypeSaga() {
+  yield takeLatest(actionTypes.LoadAllRequest, function* requestProfileSaga(action) {
+    const { payload: { user_id } } = action;
+
     yield put(actions.setLoading(true));
-    const response = yield api.loadAll();
+    const response = yield api.loadAll(user_id);
     if(response && response.status === 200){
       const { data } = response;
       yield put(actions.loadAll(data));

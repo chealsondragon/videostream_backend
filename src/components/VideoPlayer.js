@@ -1,26 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import ReactNetflixPlayer from 'react-netflix-player';
+import { actions } from 'src/store/ducks/video_player.duck';
+import * as api from "src/crud/watch.crud";
+
+var prevTimestamp = null;
+var totalPlayed = null;
+var lastWatchSecond = null;
 
 function VideoPlayer(props) {
-  const id = props.video_id;
-  const main_video = props.video;
-  
-  const [values, setValues] = React.useState({
-    playingVideo: false,
-    playingVideoFile: null,
-  });
-
-  React.useEffect(() => {
-  }, []);
-
-  const playVideo = (file) => {
-    setValues({...values, playingVideo: true, playingVideoFile: file});
-  }
+  var lang = (props.lang || "en").toLowerCase();
+  const { isPlaying, meta } = props.video_player;
 
   const stopPlaying = () => {
-    setValues({...values, playingVideo: false, playingVideoFile: null});
+    props.stop();
   }
 
   const getClipLabel = (video, file) => {
@@ -60,26 +54,56 @@ function VideoPlayer(props) {
     return `${hr}h ${min}m ${sec}s`;
   }
 
-  const serie_type = main_video && main_video.serie_type;
+  const onTimeUpdate = (evt) => {
+    evt.persist(); 
+    
+    if(!prevTimestamp)
+      prevTimestamp = evt.timeStamp;
+    if(!totalPlayed)
+      totalPlayed = 0.1;
+    
+    const dur = (evt.timeStamp - prevTimestamp)/1000;
+    if(lastWatchSecond < evt.target.currentTime)
+      totalPlayed += Math.min(dur, evt.target.currentTime-lastWatchSecond);
+    else
+      totalPlayed += dur;
+    prevTimestamp = evt.timeStamp;
+    lastWatchSecond = evt.target.currentTime;
+  }
+
+  React.useEffect(() => {
+    prevTimestamp = null;
+    totalPlayed = null;
+    lastWatchSecond = 0;
+    // console.log("init seconds...")
+
+    return () => {
+      console.log("save watched: ", totalPlayed, lastWatchSecond)
+      if(totalPlayed && lastWatchSecond){
+        api.update_watch(meta.file.id, totalPlayed, lastWatchSecond)
+      }
+    }
+  })
 
   return (
-    values.playingVideo && values.playingVideoFile && <ReactNetflixPlayer
+    isPlaying && <ReactNetflixPlayer
     // Vídeo Link - Just data is required
-      src={`${process.env.API_BASE_URL || document.location.origin}/storage/videos/${values.playingVideoFile.file_path}`}
+      style={{ position: "absolute", top: 0, left: 0, width: "100%", height: '100%', zIndex: 0 }}
+      src={meta && meta.url}
       // src={"http://videoinvalid"}
-      title={getClipLabel(main_video, values.playingVideoFile)}
-      subTitle={values.playingVideoFile.sub_title}
-      titleMedia={getClipLabel(main_video, values.playingVideoFile)}
-      extraInfoMedia={values.playingVideoFile.sub_title}
+      title={`${getClipLabel(meta.video, meta.file)}`}
+      subTitle={meta.file.sub_title || ""}
+      titleMedia={`${meta.video.title||""} >> ${getClipLabel(meta.video, meta.file)}`}
+      extraInfoMedia={""}
       // Text language of player
-      playerLanguage="en"
+      playerLanguage={lang}
       // Action when the button X (close) is clicked
       onCrossClick={() => stopPlaying()}
       backButton={() => stopPlaying()}
       // The player use the all viewport
       fullPlayer
       autoPlay
-      startPosition={0}
+      startPosition={meta.resume_ts || 0}
       // The info of the next video action
       // dataNext={{ title: 'Next Video.' }}
       // The action call when the next video is clicked
@@ -105,9 +129,9 @@ function VideoPlayer(props) {
         };
       }}
       // The function is call when the video finish
-      onEnded={() => stopPlaying()}
+      onEnded={() => {}}
       // The function is call when the video is playing (One time for frame)
-      onTimeUpdate={(evt) => {evt.persist(); console.log("playing:", evt)}}
+      onTimeUpdate={(evt) => onTimeUpdate(evt)}
       // Enable the orverlay when player is paused
       overlayEnabled
       // Enabled the auto clode controlls of player
@@ -124,7 +148,7 @@ function VideoPlayer(props) {
 
 export default injectIntl(
   connect(
-    ({  }) => ({  }),
-    null
+    ({ i18n: { lang }, video_player }) => ({ lang, video_player }),
+    actions
   )(VideoPlayer)
 ); 

@@ -10,11 +10,12 @@ import * as api from '../../crud/videos.crud';
 import * as actions from '../../store/ducks/videos.duck';
 
 function Dashboard(props) {
+  const firstMovie = props.videos.list[0];
   const [values, setValues] = React.useState({
     /** Toggles the modal when a movie is clicked. */
     toggleModal: false,
     /** Holds the movie information for a single movie. */
-    movieOverview: {},
+    movieOverview: firstMovie,
   });
 
   const selectMovieHandler = async (movie) => {

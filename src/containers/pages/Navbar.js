@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from "react-intl";
 import { NavLink } from 'react-router-dom';
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom';
@@ -71,41 +72,50 @@ function Navbar(props) {
     setValues(values => ({ ...values, userInput: '' }));
   }
 
+  const onKidsClick = () => {
+    props.history.push(URL.SELECT_PROFILE())
+  }
+
   const { scrolling } = values;
+
+  const { intl } = props;
 
   return (
     <nav className={"navigation " + (scrolling ? "black" : "")} >
-      <ul className="navigation__container">
+    <ul className="navigation__container">
         <NavLink to={URL.INDEX()} onClick={() => onLogoClick()}>
           <NetflixLogo className="navigation__container--logo"></NetflixLogo>
         </NavLink>
-        <DropdownArrow className="navigation__container--downArrow-2"></DropdownArrow>
-        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.INDEX())}>Home</div>
-        {/* <div className="navigation__container-link pseudo-link">Movies</div>
-        <div className="navigation__container-link pseudo-link">Dramas</div> */}
-        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.PAY2WATCH())}>Pay2Watch</div>
-        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.RECENT())}>Recently Added</div>
-        <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.MYLIST())}>My List</div>
+        { props.profile && 
+        <>
+          <DropdownArrow className="navigation__container--downArrow-2"></DropdownArrow>
+          <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.INDEX())}><FormattedMessage id="MENU.HOME" defaultMessage="Home"/></div>
+          {/* <div className="navigation__container-link pseudo-link">Movies</div>
+          <div className="navigation__container-link pseudo-link">Dramas</div> */}
+          <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.PAY2WATCH())}><FormattedMessage id="MENU.PAY2WATCH" defaultMessage="Pay2Watch"/></div>
+          <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.RECENT())}><FormattedMessage id="MENU.RECENT" defaultMessage="Recently Added"/></div>
+          <div className="navigation__container-link pseudo-link" onClick={() => props.history.push(URL.MYLIST())}><FormattedMessage id="MENU.MYLIST" defaultMessage="My List"/></div>
 
-        <div className="navigation__container--left">
-          <SearchLogo className="logo" />
-          <input
-            value={values.userInput}
-            onChange={onChange}
-            className="navigation__container--left__input"
-            type="text"
-            placeholder="Title, genres, people" />
-        </div>
+          <div className="navigation__container--left">
+            <SearchLogo className="logo" />
+            <input
+              value={values.userInput}
+              onChange={onChange}
+              className="navigation__container--left__input"
+              type="text"
+              placeholder="Title, genres, people" />
+          </div>
 
-        <div className="navigation__container-link pseudo-link">KIDS</div>
-        {/* <div className="navigation__container-link pseudo-link">DVD</div> */}
-        <BellLogo className="navigation__container--bellLogo" />
+          <div className="navigation__container-link pseudo-link" onClick={() => onKidsClick()}>KIDS</div>
+          {/* <div className="navigation__container-link pseudo-link">DVD</div> */}
+          <BellLogo className="navigation__container--bellLogo" />
 
-        <DropdownContent />
-        <DropdownArrow className="navigation__container--downArrow" />
+          <DropdownContent history={props.history}/>
+          <DropdownArrow className="navigation__container--downArrow" />
+        </>}
       </ul>
     </nav>
   )
 }
 
-export default withRouter(Navbar); 
+export default injectIntl(withRouter(Navbar));

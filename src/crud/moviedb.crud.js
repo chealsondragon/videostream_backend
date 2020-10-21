@@ -37,6 +37,5 @@ export function getMovieDetail(movie_id){
 }
 
 export function doVote(movie_id, newVote, addOrRemove){
-  console.log(addOrRemove)
   return axios.get(`${VOTE_MOVIE_URL}/${movie_id}/${newVote}/${addOrRemove?1:0}`); // by tag
 }

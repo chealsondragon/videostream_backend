@@ -8,12 +8,11 @@
   "MENU.APPS": "Apps",
   "MENU.DASHBOARD": "Dashboard",
 
-  "MENU.USERS": "Users",
-  "MENU.CATEGORY": "Category",
-  "MENU.VIDEO": "Video",
-  "MENU.STATS_VIDEO": "Per Video",
-  "MENU.STATS_USER": "Per User",
-  "MENU.PAYMENT": "Per Payment",
+  "MENU.HOME": "Home",
+  "MENU.PAY2WATCH": "Pay2Watch",
+  "MENU.RECENT": "Recently Added",
+  "MENU.MYLIST": "My List",
+  "MENU.KIDS": "KIDS",
 
   "AUTH.GENERAL.OR": "Or",
   "AUTH.GENERAL.SUBMIT_BUTTON": "Submit",
@@ -75,5 +74,13 @@
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.TITLE": "Status has been updated for selected customers",
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE": "Selected customers status have successfully been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
-  "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created"
+  "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
+
+  "MOVIE.PLAY": "Play",
+  "MOVIE.ADD_TO_MYLIST": "My List",
+  "MOVIE.REMOVE_FROM_MYLIST": "Remove From List",
+  "MOVIE.RATING": "Rating",
+  "MOVIE.RELEASE_DATE": "Release Date",
+  "MOVIE.PRICE": "Price",
+  "MOVIE.MEMBERSHIP": "Minimum membership"
 }
